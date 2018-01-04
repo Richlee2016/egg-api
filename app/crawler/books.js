@@ -1,6 +1,6 @@
 const cheerio = require("cheerio");
 class BookCrawler {
-    constructor() { }
+    constructor() {}
 
     chapter(html) {
         const $ = cheerio.load(html);

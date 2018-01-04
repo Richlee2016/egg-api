@@ -4,7 +4,7 @@ const Controller = require('egg').Controller;
 
 class BooksController extends Controller {
   constructor(){}
-  // 所有获取得书籍
+  // 所有书籍
   async index() {
     const ctx = this.ctx;
     ctx.body = {
@@ -12,7 +12,7 @@ class BooksController extends Controller {
     }
     ctx.status = 200;
   }
-  // 获取单个书籍内容
+  // 单个书籍
   async show() {
     const ctx = this.ctx;
     const { params: { id }, query: { chapter } } = ctx;

@@ -7,13 +7,6 @@ class HomeController extends Controller {
     this.ctx.body = 'hi, egg';
   }
 
-  async getMovies() {
-    const ctx = this.ctx;
-    ctx.body = {
-      movies: {}
-    }
-  }
-
   async getPage() {
     const ctx = this.ctx;
     const res = await ctx.service.movies.crawlerPage();
