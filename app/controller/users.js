@@ -3,8 +3,9 @@
 const Controller = require("egg").Controller;
 
 class UsersController extends Controller {
-  //QQ oauth2.0 校验
+  //QQ oauth2.0 校验 并登录
   async QQ() {
+    console.log("myqq");
     const ctx = this.ctx;
     const { code, state } = ctx.query;
     const res = await ctx.service.users.oauth(code, state);

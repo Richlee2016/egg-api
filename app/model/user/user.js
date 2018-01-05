@@ -29,9 +29,9 @@ module.exports = app => {
     }
     next();
   });
-  
+
   UserSchema.statics = {
-    async saveUser(openid,qqInfo) {
+    async saveUser(openid, qqInfo) {
       let oauth = await this.findOne({ openid }).exec();
       const now = Date.now();
       const oneMonth = 1000 * 60 * 60 * 24 * 30;
@@ -40,18 +40,18 @@ module.exports = app => {
         qqInfo
       };
       if (oauth) {
-          if(now - oauth.meta.updateAt.getTime() > oneMonth){
-              console.log("更新");
-              oauth.qqInfo = qqInfo;
-          }else{
-              console.log("验证");
-              return;
-          };
-      } else{
-          console.log("保存");
-          oauth = new Oauth(_oauth);
+        if (now - oauth.meta.updateAt.getTime() > oneMonth) {
+          console.log("更新");
+          oauth.qqInfo = qqInfo;
+        } else {
+          console.log("验证");
+          return;
+        }
+      } else {
+        console.log("保存");
+        oauth = new Users(_oauth);
       }
-  
+
       try {
         const res = await oauth.save(_oauth);
       } catch (error) {
@@ -60,5 +60,6 @@ module.exports = app => {
     }
   };
 
-  return mongoose.model("t_oauth_user", UserSchema);
+  const Users = mongoose.model("t_oauth_user", UserSchema);
+  return Users;
 };

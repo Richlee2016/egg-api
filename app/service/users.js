@@ -50,7 +50,7 @@ class UsersService extends Service {
     const openidStr = openID.replace(reg, "");
     const { openid } = JSON.parse(openidStr);
     const userInfo = await this._getUserInfo(access_token, openid);
-    const res = await this._saveUser(openid, userInfo);
+    // const res = await this._saveUser(openid, userInfo);
     return {
       state,
       openid
@@ -60,13 +60,13 @@ class UsersService extends Service {
   async _fetchAccessToken(code) {
     const sendData = {
       grant_type: "authorization_code",
-      client_id: config.appID,
-      client_secret: config.appKey,
+      client_id: this.config.appID,
+      client_secret: this.config.appKey,
       code,
       redirect_uri: encodeURI("http://173gg43187.iok.la/oauth/qq")
     };
     const res = await request({
-      uri: `${config.token}?${qs.stringify(sendData)}`,
+      uri: `${this.config.token}?${qs.stringify(sendData)}`,
       json: true
     });
     return res;
@@ -74,7 +74,7 @@ class UsersService extends Service {
   // 获取openid
   async _fetchOpenId(access_token) {
     const res = await request({
-      uri: `${config.openID}?access_token=${access_token}`,
+      uri: `${this.config.openID}?access_token=${access_token}`,
       json: true
     });
     return res;
@@ -83,19 +83,19 @@ class UsersService extends Service {
   async _getUserInfo(access_token, openid) {
     const sendData = {
       access_token,
-      oauth_consumer_key: config.appID,
+      oauth_consumer_key: this.config.appID,
       openid
     };
     const res = await request({
-      uri: `${config.get_user_info}?${qs.stringify(sendData)}`,
+      uri: `${this.config.get_user_info}?${qs.stringify(sendData)}`,
       json: true
     });
     return res;
   }
   //   保存用户
-  async _saveUser() {
+  async _saveUser(openid, qqInfo) {
     try {
-      const res = await this.User.saveOauth(openid, qqInfo);
+      const res = await this.User.saveUser(openid, qqInfo);
     } catch (error) {
       console.log(error);
     }

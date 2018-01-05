@@ -8,6 +8,7 @@ module.exports = app => {
   router.get('/', controller.home.index);
   router.get('/qq', controller.users.QQ);
   router.resources('users', '/api/users', controller.users);
+  router.resources('users', '/api/session', controller.session);
   router.resources('books', '/api/books', controller.books);
   router.resources('movies', '/api/movies', controller.movies);
 

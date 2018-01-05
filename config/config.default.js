@@ -10,7 +10,10 @@ module.exports = appInfo => {
       url: "mongodb://localhost:27017/koaapi",
       options: {}
     },
-    middleware: [],
+    middleware: ["errorHandler"],
+    errorHandler: {
+      match: '/api',
+    },
     // 测试关闭 csrf 安全检查
     security: {
       csrf: {
