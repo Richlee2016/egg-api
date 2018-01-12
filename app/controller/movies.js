@@ -49,7 +49,7 @@ class MoviesController extends Controller {
   }
 
   // 所有得在线电影资源
-  async get_OlineMovies() {
+  async get_OnlineMovies() {
     const ctx = this.ctx;
     const { query: p } = ctx;
     const res = await ctx.service.movies.fetchOnlineList(p);
