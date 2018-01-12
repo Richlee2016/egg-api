@@ -44,13 +44,14 @@ class UsersService extends Service {
   //   oauth校验
   async oauth(code, state) {
     const token = await this._fetchAccessToken(code);
+    console.log(code,token);
     const { access_token } = qs.parse(token);
     const openID = await this._fetchOpenId(access_token);
     const reg = /callback\(|\)|;/g;
     const openidStr = openID.replace(reg, "");
     const { openid } = JSON.parse(openidStr);
     const userInfo = await this._getUserInfo(access_token, openid);
-    // const res = await this._saveUser(openid, userInfo);
+    const res = await this._saveUser(openid, userInfo);
     return {
       state,
       openid

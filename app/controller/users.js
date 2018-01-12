@@ -9,7 +9,6 @@ class UsersController extends Controller {
     const ctx = this.ctx;
     const { code, state } = ctx.query;
     const res = await ctx.service.users.oauth(code, state);
-    ctx.session.user = res.openid;
     ctx.body = ctx.service.users.redirectUrl(`${res.state}#${res.openid}`);
     ctx.status = 200;
   }

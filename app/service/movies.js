@@ -5,6 +5,8 @@ class MoviesService extends Service {
     super(ctx);
     this.Movie = this.ctx.model.Movie.Movie;
     this.Page = this.ctx.model.Movie.Page;
+    this.Online = this.ctx.model.Movie.OnlineMovie;
+    this.Hot = this.ctx.model.Movie.Hot;
   }
   // 获取所有电影
   async fetchList(p) {
@@ -93,7 +95,7 @@ class MoviesService extends Service {
       const isSave = await this._saveMovies(newest);
       if (isSave) {
         const page = await Crawler.page();
-        const maxVal = await this.Page.savePage({name:'index',list:page});
+        const maxVal = await this.Page.savePage({ name: "index", list: page });
       }
       return isSave;
     } catch (error) {
@@ -116,6 +118,77 @@ class MoviesService extends Service {
     } else {
       return "电影为最新资源";
     }
+  }
+
+  // 所有在线电影
+  async fetchOnlineList(p) {
+    const page = Number(p.page) || 1;
+    const size = Number(p.size) || 10;
+    const area = p.area;
+    const type = p.type;
+    const year = Number(p.year);
+    const actor = p.actor;
+    const director = p.director;
+    const mySearch = () => {
+      let arr = [];
+      if (area) arr.push({ area });
+      if (type) arr.push({ type });
+      if (year) arr.push({ year });
+      if (actor) arr.push({ actor });
+      if (director) arr.push({ director });
+      return arr;
+    };
+    let allSearch = {};
+    if (mySearch().length > 0) {
+      allSearch = Object.assign({}, { $and: mySearch() });
+    }
+    let skip = (page - 1) * size;
+    try {
+      const counts = await this.Online.count(allSearch).exec();
+      const movielist = await this.Online.find(allSearch)
+        .sort({ id: -1 })
+        .limit(size)
+        .skip(skip)
+        .exec();
+      return {
+        list: movielist,
+        count: counts
+      };
+    } catch (error) {
+      console.log("列表查询错误");
+      console.log(error);
+    }
+  }
+
+  // 单个在线电影
+  async fetchOnlineMovie(id) {
+    try {
+      return await this.Online.findOne({ id }).exec();
+    } catch (error) {
+      console.log("电影查询错误");
+      console.log(error);
+    }
+  }
+
+  // 所有得推荐电影资源
+  async fetchHotList() {}
+  // 单个推荐电影资源
+  async fetchHotMovie(id) {
+    const res = await this.Hot.findOne({id}).populate("movieHome").exec();
+    return res;
+  }
+  // 增加或修改单个推荐电影资源
+  async csHotMovie(hot) {
+    const res = await this.Hot.SaveHot(hot);
+    return res;
+  }
+  // 修改单个推荐电影资源
+  // async updateHotMovie(hot) {
+  //   console.log(id);
+  // }
+  // 删除单个推荐电影资源
+  async destroyHotMovie(id) {
+    const res = await this.Hot.deleteMany([])
   }
 }
 
