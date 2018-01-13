@@ -12,7 +12,7 @@ module.exports = {
     Object.keys(controller).forEach(path => {
       Object.keys(controller[path]).forEach(o => {
         const myRouter = disPath(o);
-        console.log(myRouter, ALLOW.indexOf(myRouter.methods));
+        // console.log(myRouter, ALLOW.indexOf(myRouter.methods));
         if (ALLOW.indexOf(myRouter.methods) === -1) {
           return;
         }

@@ -171,10 +171,10 @@ class MoviesService extends Service {
   }
 
   // 所有得推荐电影资源
-  async fetchHotList() {}
+  async fetchHotList() { }
   // 单个推荐电影资源
   async fetchHotMovie(id) {
-    const res = await this.Hot.findOne({id}).populate("movieHome").exec();
+    const res = await this.Hot.findOne({ id }).populate("movieHome").exec();
     return res;
   }
   // 增加或修改单个推荐电影资源
@@ -182,13 +182,10 @@ class MoviesService extends Service {
     const res = await this.Hot.SaveHot(hot);
     return res;
   }
-  // 修改单个推荐电影资源
-  // async updateHotMovie(hot) {
-  //   console.log(id);
-  // }
   // 删除单个推荐电影资源
   async destroyHotMovie(id) {
-    const res = await this.Hot.deleteMany([])
+    const res = await this.Hot.remove({ id: { $in: id } }).exec();
+    return res;
   }
 }
 

@@ -33,7 +33,8 @@ module.exports = app => {
 
   HotSchema.statics = {
     async SaveHot(hot) {
-      let getHot = await this.findOne({ name:hot.name }).exec();
+      let getHot = await this.findOne({ name:hot.id }).exec();
+      console.log(getHot);
       const _hot = hot;
       if (getHot) {
         getHot.name = hot.name;
