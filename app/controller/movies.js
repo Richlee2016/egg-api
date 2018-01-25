@@ -16,7 +16,7 @@ class MoviesController extends Controller {
   }
   /**
    * @Movies{电影家园}
-   * get => /Movie {全部}
+   * get => /Movies {全部}
    * get => /Movies/:id {单个}
    * get => /MoviePage {首页展示}
    * get => /MovieBili/:id {bili搜索}

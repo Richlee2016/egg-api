@@ -23,6 +23,7 @@ module.exports = {
           );
           return;
         }
+        // console.log(myRouter.methods,`/api/${path}/${myRouter.path}`);
         router[myRouter.methods](
           `/api/${path}/${myRouter.path}`,
           controller[path][o]

@@ -171,7 +171,11 @@ class MoviesService extends Service {
   }
 
   // 所有得推荐电影资源
-  async fetchHotList() { }
+  async fetchHotList(page,size) {
+    let skip = (page - 1) * size;
+    const res = await this.Hot.find().limit(size).skip(skip).populate("movieHome").exec();
+    return res;
+  }
   // 单个推荐电影资源
   async fetchHotMovie(id) {
     const res = await this.Hot.findOne({ id }).populate("movieHome").exec();

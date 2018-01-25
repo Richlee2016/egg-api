@@ -1,0 +1,58 @@
+module.exports = app => {
+    const mongoose = app.mongoose;
+    const { Schema } = mongoose;
+    const FreeSchema = new mongoose.Schema({
+      _id: Number,
+      name: String,
+      author:String,
+      freeId:Number,
+      freeChapter:[],
+      meta: {
+        createAt: {
+          type: Date,
+          default: Date.now()
+        },
+        updateAt: {
+          type: Date,
+          default: Date.now()
+        }
+      }
+    });
+  
+    FreeSchema.pre("save", function(next) {
+      if (this.isNew) {
+        this.meta.createAt = this.meta.updateAt = Date.now();
+      } else {
+        this.meta.updateAt = Date.now();
+      }
+      next();
+    });
+  
+    FreeSchema.statics = {
+      async SaveFree(free) {
+        let getFree = await this.findOne({ _id:free._id }).exec();
+        console.log(free);
+        const _free = free;
+        if (getFree) {
+          getFree.name = free.name;
+          getFree.author = free.author;
+          getFree.freeId = free.freeId;
+          getFree.freeChapter = free.freeChapter;
+        } else {
+          getFree = new Free(_free);
+        }
+        try {
+          const res = await getFree.save();
+          console.log(`${free.name}更新成功`);
+          return res;
+        } catch (error) {
+          console.log(`${free.name}更新失败`);
+          console.log(error);
+        }
+      }
+    };
+  
+    const Free = mongoose.model("t_book_free", FreeSchema);
+    return Free;
+  };
+  

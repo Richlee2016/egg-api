@@ -8,6 +8,7 @@ class BooksService extends Service {
             chapter: id => `https://www.23us.cc/html/4/${id}`,
             read: (id, chapter) => `https://www.23us.cc/html/4/${id}/${chapter}.html`
         }
+        this.Free = this.ctx.model.Book.Free;
     }
     // 获取书籍内容
     async read(id, chapter) {
@@ -21,6 +22,11 @@ class BooksService extends Service {
         const resHtml = await request(this.config.chapter(id));
         const chapter = Crawler.chapter(resHtml);
         return chapter;
+    }
+
+    async csFreeBook(free){
+        const res = await this.Free.SaveFree(free)
+        return res;
     }
 }
 
