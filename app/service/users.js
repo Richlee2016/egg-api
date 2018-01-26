@@ -34,7 +34,7 @@ class UsersService extends Service {
   }
   // 单个用户
   async fetchUser(openid) {
-      console.log(openid);
+    console.log(openid);
     try {
       return await this.User.findOne({ openid }).exec();
     } catch (error) {
@@ -44,7 +44,7 @@ class UsersService extends Service {
   //   oauth校验
   async oauth(code, state) {
     const token = await this._fetchAccessToken(code);
-    console.log(code,token);
+    console.log(code, token);
     const { access_token } = qs.parse(token);
     const openID = await this._fetchOpenId(access_token);
     const reg = /callback\(|\)|;/g;
@@ -116,6 +116,47 @@ class UsersService extends Service {
         </body>
       </html>
       `;
+  }
+
+  // 获取收藏
+  async fetchCollect(openid, path, select) {
+    const res = await this.User.findOne({ openid })
+      .populate({
+        path,
+        select
+      })
+      .exec();
+    console.log(res);
+    return res;
+  }
+
+  // 操作收藏
+  async createCollect(openid, id, handle, collect) {
+    let col, han;
+    if (collect === "movieCollect") {
+      col = { movieCollect: { id } };
+    } else if (collect === "bookCollect") {
+      col = { bookCollect: { id } };
+    }
+    if (handle === "push") {
+      han = { $push: col };
+    } else if (handle === "pull") {
+      han = { $pull: col };
+    }
+    const res = await this.User.updateOne({ openid }, han);
+    return res;
+  }
+
+  // 删除收藏
+  async deleteCollect(openid, id) {
+    let delObj;
+    if (collect === "movieCollect") {
+      delObj = { movieCollect: { id } };
+    } else if (collect === "bookCollect") {
+      delObj = { bookCollect: { id } };
+    }
+    const res = await this.User.updateOne({ openid }, { $pull: delObj });
+    return res;
   }
 }
 

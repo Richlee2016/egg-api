@@ -3,8 +3,13 @@
 const Controller = require("egg").Controller;
 
 class SessionController extends Controller {
+/**
+   * @Session{电影家园}
+   * get  => /Session {登录}
+   * post => /DeleteSession {登出}
+   */
   // 获取会话
-  async index() {
+  async get_Session() {
     const ctx = this.ctx;
     let { openid } = ctx.query;
     const { user } = ctx.session;
@@ -22,7 +27,7 @@ class SessionController extends Controller {
     ctx.status = 200;
   }
   // 删除会话
-  destroy() {
+  post_DeleteSession() {
     const ctx = this.ctx;
     ctx.session.user = null;
     ctx.body = 1;

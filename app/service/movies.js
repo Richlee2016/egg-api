@@ -3,6 +3,7 @@ const Crawler = require("../crawler/movies");
 class MoviesService extends Service {
   constructor(ctx) {
     super(ctx);
+    this.User = this.ctx.model.User.User;
     this.Movie = this.ctx.model.Movie.Movie;
     this.Page = this.ctx.model.Movie.Page;
     this.Online = this.ctx.model.Movie.OnlineMovie;
@@ -171,14 +172,20 @@ class MoviesService extends Service {
   }
 
   // 所有得推荐电影资源
-  async fetchHotList(page,size) {
+  async fetchHotList(page, size) {
     let skip = (page - 1) * size;
-    const res = await this.Hot.find().limit(size).skip(skip).populate("movieHome").exec();
+    const res = await this.Hot.find()
+      .limit(size)
+      .skip(skip)
+      .populate("movieHome")
+      .exec();
     return res;
   }
   // 单个推荐电影资源
   async fetchHotMovie(id) {
-    const res = await this.Hot.findOne({ id }).populate("movieHome").exec();
+    const res = await this.Hot.findOne({ id })
+      .populate("movieHome")
+      .exec();
     return res;
   }
   // 增加或修改单个推荐电影资源

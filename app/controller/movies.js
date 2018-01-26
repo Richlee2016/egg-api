@@ -20,6 +20,8 @@ class MoviesController extends Controller {
    * get => /Movies/:id {单个}
    * get => /MoviePage {首页展示}
    * get => /MovieBili/:id {bili搜索}
+   * get => /MovieCollect {获取电影收藏}
+   * post => /MovieCollect {body:id,handle(push,pull)} {操作电影收藏}
    */
   async get_Movies() {
     const ctx = this.ctx;
@@ -54,6 +56,22 @@ class MoviesController extends Controller {
       page: res
     };
     ctx.status = 200;
+  }
+  async get_MovieCollect(){
+    console.log(0);
+    const ctx = this.ctx;
+    const openid = ctx.session.user;
+    const res = await ctx.service.users.fetchCollect("E71A6C17E7FAE3981C4F63CBE98A5F43","movieCollect.id","id name area year img");
+    ctx.body = res;
+    ctx.status = 200;
+  }
+  async post_MovieCollect(){
+    const ctx = this.ctx;
+    const openid = ctx.session.user;
+    const {id,handle} = ctx.request.body;
+    const res = await ctx.service.users.createCollect("E71A6C17E7FAE3981C4F63CBE98A5F43",id,handle,"movieCollect");
+    ctx.body = res;
+    ctx.status = 201;
   }
   /**
    * @OnlineMovie {熊猫在线电影}

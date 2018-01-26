@@ -4,6 +4,9 @@ module.exports = app => {
   const UserSchema = new mongoose.Schema({
     openid: String,
     qqInfo: Object,
+    movieCollect:[{id:{ type:Number, ref: "t_movie_home"}}],
+    bookCollect:[{id:{ type:Number, ref: "t_book_frees"}}],
+    onlineCollect:{type:Number,ref:"t_online_movie"},
     limit: {
       //权限系统  1~100  100最高权限(在下 Rich Lee 有何贵干！ (￣_,￣ ) )
       type: Number,
