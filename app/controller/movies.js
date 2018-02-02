@@ -14,6 +14,7 @@ class MoviesController extends Controller {
       introduce: "string"
     };
   }
+  
   /**
    * @Movies{电影家园}
    * get => /Movies {全部}
@@ -130,7 +131,10 @@ class MoviesController extends Controller {
   async post_UpdateHotMovie() {
     const ctx = this.ctx;
     // ctx.validate(this.Rules);
-    const res = await ctx.service.movies.csHotMovie(ctx.request.body);
+    let body = ctx.request.body;
+    const {movieHome,hotType} = ctx.request.body;
+    const sendBody = Object.assign(body,{movieHome:Number(movieHome) || 0 ,hotType:Number(hotType) || 0});
+    const res = await ctx.service.movies.csHotMovie(sendBody);
     ctx.body = res;
     ctx.status = 201;
   }

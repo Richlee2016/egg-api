@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>react-admin</title>
+  </head>
+  <style>
+  .api-box .api-path span{
+    padding: 0 10px;
+  }
+  </style>
+  <body>
+    {% for a in apis %}
+    <div class="api-box">
+      <h3>{{a.api}}</h3>
+      {% for g in a.group %}
+      <div class="api-path">
+        <span>{{g.method}}</span>
+        <span>{{g.path}}</span>
+      </div>
+      {% endfor %}
+    </div>
+    {% endfor %}
+  </body>
+</html>

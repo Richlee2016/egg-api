@@ -19,4 +19,10 @@ exports.cors = {
   package: "egg-cors"
 };
 
+// nunjucks模板
+exports.nunjucks = {
+  enable: true,
+  package: 'egg-view-nunjucks',
+};
+
 // exports.session = true;

@@ -4,10 +4,10 @@
  * @param {Egg.Application} app - egg application
  */
 module.exports = app => {
-  const { router, controller,routerParse } = app;
+  const { router, controller,routerParse} = app;
 // console.log(app);
-  routerParse(router, controller);
-
+  const apidoc = routerParse(router, controller);
+  app.apiDoc = apidoc;
   router.get("/", controller.home.index);
   // oauth
   router.get("/oauth/qq", controller.users.QQ);

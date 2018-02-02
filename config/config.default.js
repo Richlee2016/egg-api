@@ -23,6 +23,13 @@ module.exports = appInfo => {
     },
     cors: {
       allowMethods: "GET,HEAD,PUT,POST,DELETE,PATCH,OPTIONS"
+    },
+    // 模板引擎
+    view:{
+      defaultViewEngine: 'nunjucks',
+      mapping: {
+        '.html': 'nunjucks',
+      },
     }
   };
   return config;

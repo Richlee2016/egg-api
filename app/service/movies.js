@@ -12,9 +12,12 @@ class MoviesService extends Service {
   // 获取所有电影
   async fetchList(p) {
     const page = Number(p.page) || 1;
-    const size = Number(p.size) || 21;
+    const size = Number(p.size) || 10;
     const catalog = p.catalog;
     const classify = p.classify;
+    const actor = p.actor;
+    const director = p.director;
+    const name = p.name;
     const area = p.area;
     const year = Number(p.year);
     const mySearch = () => {
@@ -24,6 +27,9 @@ class MoviesService extends Service {
       if (classify) arr.push({ classify });
       if (catalog) arr.push({ catalog });
       if (area) arr.push({ area });
+      if (name) arr.push({ name });
+      if (director) arr.push({ director });
+      if (actor) arr.push({ actor });
       return arr;
     };
     let skip = (page - 1) * size;

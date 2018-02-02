@@ -4,7 +4,9 @@ const Controller = require('egg').Controller;
 
 class HomeController extends Controller {
   async index() {
-    this.ctx.body = 'hi, egg';
+    const ctx = this.ctx;
+    // this.app.apiDoc
+    await ctx.render('index.html', { apis: this.app.apiDoc });
   }
 
   async getPage() {

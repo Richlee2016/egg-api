@@ -7,9 +7,9 @@ module.exports = app => {
     name: String,
     movieHome: { type:Number, ref: "t_movie_home" },
     onlineSrc:String,
-    bgm: String,
+    // bgm: String,
     videoUrl: String,
-    introduce: String,
+    hotType: Number,//1 热门推荐  2 即将上映 3.经典影片
     meta: {
       createAt: {
         type: Date,
@@ -40,9 +40,9 @@ module.exports = app => {
         getHot.name = hot.name;
         getHot.movieHome = hot.movieHome;
         getHot.onlineSrc = hot.onlineSrc;
-        getHot.bgm = hot.bgm;
+        // getHot.bgm = hot.bgm;
         getHot.videoUrl = hot.videoUrl;
-        getHot.introduce = hot.introduce;
+        getHot.hotType = hot.hotType;
       } else {
         getHot = new Hot(_hot);
       }
