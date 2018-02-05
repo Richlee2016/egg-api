@@ -9,7 +9,7 @@ class HomeController extends Controller {
   async index() {
     const ctx = this.ctx;
     // this.app.apiDoc
-    await ctx.render('index.html', { apis: this.app.apiDoc });
+    await ctx.render('index.html', { apis: this.app.apiDocument() });
   }
   // 定时任务
   // 获取电影家园首页
@@ -20,7 +20,7 @@ class HomeController extends Controller {
   }
   // 获取在线电影 分类页
   async get_getOnlineMenu(ctx) {
-    const res = await ctx.service.movies.crawlerOnlineMenu();
+    const res = await ctx.service.onlines.crawlerMenu();
     ctx.body = res;
   }
 

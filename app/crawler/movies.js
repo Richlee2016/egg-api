@@ -4,10 +4,6 @@ const install = require("superagent-charset");
 const request = require("superagent");
 const superagent = install(request);
 
-const online = {
-  MENU: Symbol("online-menu")
-};
-
 class BookCrawler {
   constructor() {
     this.config = {
@@ -338,43 +334,6 @@ class BookCrawler {
     return mymovie;
   }
 
-  // 在线电影 menu 抓取
-  async onlineMenu() {
-    let type = [1, 2, 3, 4];
-    let proArr = type.map(o => {
-      return rp({ uri: this.onlineSrc.menu(o), json: true });
-    });
-    try {
-      const reqHtml = await Promise.all(proArr);
-      const menuList = reqHtml.map(o => {
-        return this[online.MENU](o);
-      });
-      return menuList;
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  [online.MENU](html) {
-    const $ = cheerio.load(html);
-    const collapse = $("#collapse ul").get();
-    const type = collapse.map(u => {
-      const lis = $(u).find("a").get();
-      return {
-        title:$(u).find("span").text(),
-        menus:lis.map((l,num) => {
-          return {
-            nav:$(l).text(),
-            href:$(l).attr("href")
-          }
-        })
-      }
-    })
-    return {
-      name:$(".content-meun .head span").eq(1).text(),
-      type
-    };
-  }
 }
 
 module.exports = new BookCrawler();

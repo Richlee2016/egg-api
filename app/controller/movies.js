@@ -74,77 +74,80 @@ class MoviesController extends Controller {
     ctx.body = res;
     ctx.status = 201;
   }
-  /**
-   * @OnlineMovie {熊猫在线电影}
-   * get => /OnlineMovie {全部}
-   * get => /OnlineMovie/:id {单个}
-   */
-  async get_OnlineMovies() {
-    const ctx = this.ctx;
-    const { query: p } = ctx;
-    const res = await ctx.service.movies.fetchOnlineList(p);
-    ctx.body = {
-      movies: res
-    };
-    ctx.status = 200;
-  }
-  async single_OnlineMovies() {
-    const ctx = this.ctx;
-    const { params: { id } } = ctx;
-    console.log(id);
-    ctx.validate({ id: "int" }, { id: Number(id) });
-    const res = await ctx.service.movies.fetchOnlineMovie(id);
-    ctx.body = {
-      movie: res
-    };
-    ctx.status = 200;
-  }
-  /*
-  @HotMovies {热门推荐}
-  get /HotMovies {全部}
-  get /HotMovies/:id {单个}
-  post /UpdateHotMovie {增加和修改}
-  post /DeleteHotMovie {删除}
-  */
-  async get_HotMovies() {
-    const ctx = this.ctx;
-    const { page, size } = ctx.query;
-    const res = await ctx.service.movies.fetchHotList({
-      page: Number(page) || 1,
-      size: Number(size) || 10
-    });
-    ctx.body = {
-      movies: res
-    };
-    ctx.status = 200;
-  }
-  async single_HotMovies() {
-    const ctx = this.ctx;
-    const { params: { id } } = ctx;
-    ctx.validate({ id: "int" }, { id: Number(id) });
-    const res = await ctx.service.movies.fetchHotMovie(id);
-    ctx.body = {
-      movie: res
-    };
-    ctx.status = 200;
-  }
-  async post_UpdateHotMovie() {
-    const ctx = this.ctx;
-    // ctx.validate(this.Rules);
-    let body = ctx.request.body;
-    const {movieHome,hotType} = ctx.request.body;
-    const sendBody = Object.assign(body,{movieHome:Number(movieHome) || 0 ,hotType:Number(hotType) || 0});
-    const res = await ctx.service.movies.csHotMovie(sendBody);
-    ctx.body = res;
-    ctx.status = 201;
-  }
-  async post_DeleteHotMovie() {
-    const ctx = this.ctx;
-    const { id } = ctx.request.body;
-    const res = await ctx.service.movies.destroyHotMovie(id);
-    ctx.body = res;
-    ctx.status = 204;
-  }
+  // /**
+  //  * @OnlineMovie {熊猫在线电影}
+  //  * get => /OnlineMovie {全部}
+  //  * get => /OnlineMovie/:id {单个}
+  //  */
+  // async get_OnlineMovies() {
+  //   const ctx = this.ctx;
+  //   const { query: p } = ctx;
+  //   const res = await ctx.service.movies.fetchOnlineList(p);
+  //   ctx.body = {
+  //     movies: res
+  //   };
+  //   ctx.status = 200;
+  // }
+  // async single_OnlineMovies() {
+  //   const ctx = this.ctx;
+  //   const { params: { id } } = ctx;
+  //   console.log(id);
+  //   ctx.validate({ id: "int" }, { id: Number(id) });
+  //   const res = await ctx.service.movies.fetchOnlineMovie(id);
+  //   ctx.body = {
+  //     movie: res
+  //   };
+  //   ctx.status = 200;
+  // }
+  // async get_OnlinePageMenu(ctx){
+  //   const menu = await ctx.service.movies.fetchOlinePageMenu();
+  // }
+  // /*
+  // @HotMovies {热门推荐}
+  // get /HotMovies {全部}
+  // get /HotMovies/:id {单个}
+  // post /UpdateHotMovie {增加和修改}
+  // post /DeleteHotMovie {删除}
+  // */
+  // async get_HotMovies() {
+  //   const ctx = this.ctx;
+  //   const { page, size } = ctx.query;
+  //   const res = await ctx.service.movies.fetchHotList({
+  //     page: Number(page) || 1,
+  //     size: Number(size) || 10
+  //   });
+  //   ctx.body = {
+  //     movies: res
+  //   };
+  //   ctx.status = 200;
+  // }
+  // async single_HotMovies() {
+  //   const ctx = this.ctx;
+  //   const { params: { id } } = ctx;
+  //   ctx.validate({ id: "int" }, { id: Number(id) });
+  //   const res = await ctx.service.movies.fetchHotMovie(id);
+  //   ctx.body = {
+  //     movie: res
+  //   };
+  //   ctx.status = 200;
+  // }
+  // async post_UpdateHotMovie() {
+  //   const ctx = this.ctx;
+  //   // ctx.validate(this.Rules);
+  //   let body = ctx.request.body;
+  //   const {movieHome,hotType} = ctx.request.body;
+  //   const sendBody = Object.assign(body,{movieHome:Number(movieHome) || 0 ,hotType:Number(hotType) || 0});
+  //   const res = await ctx.service.movies.csHotMovie(sendBody);
+  //   ctx.body = res;
+  //   ctx.status = 201;
+  // }
+  // async post_DeleteHotMovie() {
+  //   const ctx = this.ctx;
+  //   const { id } = ctx.request.body;
+  //   const res = await ctx.service.movies.destroyHotMovie(id);
+  //   ctx.body = res;
+  //   ctx.status = 204;
+  // }
 }
 
 module.exports = MoviesController;

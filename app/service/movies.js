@@ -184,6 +184,12 @@ class MoviesService extends Service {
     return menu;
   }
 
+  // 在线电影 menu 获取
+  async fetchOlinePageMenu(){
+    const res = await this.Page.findOne({name:"onlineMenu"});
+    return res;
+  }
+
   // 所有得推荐电影资源
   async fetchHotList(page, size) {
     let skip = (page - 1) * size;

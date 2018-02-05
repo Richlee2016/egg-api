@@ -1,3 +1,5 @@
+const fs =require("fs")
+const path = require("path")
 module.exports = app => {
     // app.sessionStore = {
     //   async get(key) {
@@ -14,4 +16,9 @@ module.exports = app => {
     //     await app.redis.del(key);
     //   },
     // };
+    // app.beforeStart(async () => {
+    //     // const api =await fs.readdirSync(path.resolve(__dirname,"../run/router.json"),"utf-8")
+    //     app.apiDocument = 1;
+    // });
+    // app.apiDocument = 1;
 }  

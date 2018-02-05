@@ -1,8 +1,10 @@
 const MovieCrawler =  require("../crawler/movies")
-const BooksCrawler =  require("../crawler/books")
+const BookCrawler =  require("../crawler/books")
+const OnlineCrawler =  require("../crawler/onlines")
 module.exports = {
     crawler:{
         Movie:MovieCrawler,
-        Book:BooksCrawler
+        Book:BookCrawler,
+        Online:OnlineCrawler
     }
 };
