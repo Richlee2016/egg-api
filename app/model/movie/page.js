@@ -53,6 +53,7 @@ module.exports = app => {
       return data;
     }
   }
-  return mongoose.model('t_movie_page', MoviePageSchema);
+  const Page = mongoose.model('t_movie_page', MoviePageSchema);
+  return Page;
 }
 

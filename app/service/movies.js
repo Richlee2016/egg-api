@@ -1,5 +1,4 @@
 const Service = require("egg").Service;
-const Crawler = require("../crawler/movies");
 class MoviesService extends Service {
   constructor(ctx) {
     super(ctx);
@@ -8,6 +7,7 @@ class MoviesService extends Service {
     this.Page = this.ctx.model.Movie.Page;
     this.Online = this.ctx.model.Movie.OnlineMovie;
     this.Hot = this.ctx.model.Movie.Hot;
+    this.Crawler = this.ctx.helper.crawler.Movie;
   }
   // 获取所有电影
   async fetchList(p) {
@@ -87,7 +87,7 @@ class MoviesService extends Service {
   // 获取bili
   async fetchBili(keyword) {
     try {
-      let bili = await Crawler.bili(keyword);
+      let bili = await this.Crawler.bili(keyword);
       console.log("查询成功");
       return bili;
     } catch (e) {
@@ -98,10 +98,10 @@ class MoviesService extends Service {
   // 更新电影
   async crawlerPage() {
     try {
-      const newest = await Crawler.newestId();
+      const newest = await this.Crawler.newestId();
       const isSave = await this._saveMovies(newest);
       if (isSave) {
-        const page = await Crawler.page();
+        const page = await this.Crawler.page();
         const maxVal = await this.Page.savePage({ name: "index", list: page });
       }
       return isSave;
@@ -115,7 +115,7 @@ class MoviesService extends Service {
   async _saveMovies(newestId) {
     const maxCount = await this.Movie.count({}).exec();
     if (newestId > maxCount) {
-      const more = await Crawler.movies(newestId, maxCount);
+      const more = await this.Crawler.movies(newestId, maxCount);
       try {
         const insert = this.Movie.insertMany(more);
         return insert;
@@ -175,6 +175,13 @@ class MoviesService extends Service {
       console.log("电影查询错误");
       console.log(error);
     }
+  }
+
+  // 在线电影menu抓取
+  async crawlerOnlineMenu(){
+    const list =await this.Crawler.onlineMenu();
+    const menu = await this.Page.savePage({ name: "onlineMenu", list });
+    return menu;
   }
 
   // 所有得推荐电影资源

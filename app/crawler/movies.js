@@ -3,13 +3,29 @@ const rp = require("request-promise");
 const install = require("superagent-charset");
 const request = require("superagent");
 const superagent = install(request);
+
+const online = {
+  MENU: Symbol("online-menu")
+};
+
 class BookCrawler {
   constructor() {
+    this.config = {
+      onlineSrc: "http://www.dy280.com/" //熊猫影院
+    };
     this.crawlerSrc = {
       movie: id => `http://www.idyjy.com/sub/${id}.html`,
       page: "http://www.idyjy.com/",
       newest: "http://www.idyjy.com/w.asp?p=1&f=0",
-      bili:s => `https://search.bilibili.com/all?keyword=${s}&from_source=banner_search`
+      bili: s =>
+        `https://search.bilibili.com/all?keyword=${s}&from_source=banner_search`
+    };
+    this.onlineSrc = {
+      menu: num =>
+        `${this.config.onlineSrc}/index.php?m=vod-list-id-${num}.html`, //每天更新
+      newest: `${this.config.onlineSrc}new.html`, //每天更新
+      rank: `${this.config.onlineSrc}top.html`, //每天更新
+      topic: `${this.config.onlineSrc}topic.html` //每三天更新
     };
     this.numReg = /\d+/g;
   }
@@ -84,10 +100,10 @@ class BookCrawler {
   }
 
   // 抓取bili 搜索
-  async bili(keyword){
+  async bili(keyword) {
     const s = encodeURIComponent(keyword);
     try {
-      const reqHtml = await rp({uri:this.crawlerSrc.bili(s),json:true});
+      const reqHtml = await rp({ uri: this.crawlerSrc.bili(s), json: true });
       const bili = this._biliHandle(reqHtml);
       return bili;
     } catch (error) {
@@ -96,31 +112,40 @@ class BookCrawler {
   }
 
   // 处理bili dom
-  _biliHandle(dom){
+  _biliHandle(dom) {
     const $ = cheerio.load(dom);
     const box = $(".ajax-render li").get();
     console.log(box.length);
     const hrefReg = /(av\d+)/g;
     const upNameReg = /(\d+)/g;
-    const trimReg = str => str.replace(/(\n)|(\t)/,"").trim();
-    const list = box.map((o,i) => {
-        const domA = $(o).find('a')
-        const tags = $(o).find(".tags span")
-        const up = tags.eq(3)
-        return {
-            id:i+1,
-            av:domA.attr('href').match(hrefReg)[0],
-            title:domA.attr('title').trim(),
-            img:$(o).find("img").attr('data-src'),
-            time:trimReg($(o).find(".so-imgTag_rb").text()),
-            playTime:trimReg(tags.eq(1).text()),
-            upTime:trimReg(tags.eq(2).text()),
-            upZhu:{
-                name:up.find('a').text(),
-                id:up.find('a').attr('href').match(upNameReg)[0]
-            }
+    const trimReg = str => str.replace(/(\n)|(\t)/, "").trim();
+    const list = box.map((o, i) => {
+      const domA = $(o).find("a");
+      const tags = $(o).find(".tags span");
+      const up = tags.eq(3);
+      return {
+        id: i + 1,
+        av: domA.attr("href").match(hrefReg)[0],
+        title: domA.attr("title").trim(),
+        img: $(o)
+          .find("img")
+          .attr("data-src"),
+        time: trimReg(
+          $(o)
+            .find(".so-imgTag_rb")
+            .text()
+        ),
+        playTime: trimReg(tags.eq(1).text()),
+        upTime: trimReg(tags.eq(2).text()),
+        upZhu: {
+          name: up.find("a").text(),
+          id: up
+            .find("a")
+            .attr("href")
+            .match(upNameReg)[0]
         }
-    })
+      };
+    });
     return list;
   }
   // 处理首页dom
@@ -311,6 +336,44 @@ class BookCrawler {
       url: getUrl()
     };
     return mymovie;
+  }
+
+  // 在线电影 menu 抓取
+  async onlineMenu() {
+    let type = [1, 2, 3, 4];
+    let proArr = type.map(o => {
+      return rp({ uri: this.onlineSrc.menu(o), json: true });
+    });
+    try {
+      const reqHtml = await Promise.all(proArr);
+      const menuList = reqHtml.map(o => {
+        return this[online.MENU](o);
+      });
+      return menuList;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  [online.MENU](html) {
+    const $ = cheerio.load(html);
+    const collapse = $("#collapse ul").get();
+    const type = collapse.map(u => {
+      const lis = $(u).find("a").get();
+      return {
+        title:$(u).find("span").text(),
+        menus:lis.map((l,num) => {
+          return {
+            nav:$(l).text(),
+            href:$(l).attr("href")
+          }
+        })
+      }
+    })
+    return {
+      name:$(".content-meun .head span").eq(1).text(),
+      type
+    };
   }
 }
 

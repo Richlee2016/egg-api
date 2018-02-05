@@ -34,16 +34,17 @@ module.exports = app => {
   HotSchema.statics = {
     async SaveHot(hot) {
       let getHot = await this.findOne({ name:hot.id }).exec();
-      console.log(getHot);
       const _hot = hot;
+      console.log(hot);
       if (getHot) {
         getHot.name = hot.name;
         getHot.movieHome = hot.movieHome;
         getHot.onlineSrc = hot.onlineSrc;
         // getHot.bgm = hot.bgm;
-        getHot.videoUrl = hot.videoUrl;
+        getHot.videoUrl = `http://www.yugaopian.cn/embed/${hot.videoUrl}`;
         getHot.hotType = hot.hotType;
       } else {
+        _hot.videoUrl = `http://www.yugaopian.cn/embed/${hot.videoUrl}`;
         getHot = new Hot(_hot);
       }
       try {
