@@ -12,6 +12,7 @@
     "egg-session": "^3.0.0",
     "egg-validate": "^1.0.0",
     "egg-view-nunjucks": "^2.1.4",
+    "lodash": "^4.17.5",
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
     "superagent": "^3.8.2",

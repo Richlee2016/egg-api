@@ -12,10 +12,13 @@
   </style>
   <body>
     {% for a in apis %}
+      <h3>{{a.name}}</h3>
+      {% for b in a.apiList %}
       <div class="api-path">
-        <span>{{a.method}}</span>
-        <span>{{a.path}}</span>
+        <span>{{b.method}}</span>
+        <span>{{b.path}}</span>
       </div>
+      {% endfor %}
     {% endfor %}
   </body>
 </html>

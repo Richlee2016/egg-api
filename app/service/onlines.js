@@ -4,7 +4,7 @@ class MoviesService extends Service {
     super(ctx);
     this.User = this.ctx.model.User.User;
     this.Page = this.ctx.model.Movie.Page;
-    this.Online = this.ctx.model.Movie.OnlineMovie;
+    this.Online = this.ctx.model.Movie.Online;
     this.Crawler = this.ctx.helper.crawler.Online;
   }
 
@@ -58,29 +58,50 @@ class MoviesService extends Service {
     }
   }
 
-  // 在线电影 menu 获取
+  // 在线电影menu 获取
   async fetchMenu(){
-    const res = await this.Page.findOne({name:"onlineMenu"});
-    return res;
-  }
-  
-  // 在线电影menu抓取
-  async crawlerMenu(){
-    const list =await this.Crawler.onlineMenu();
-    const menu = await this.Page.savePage({ name: "onlineMenu", list });
-    return menu;
-  }
-
-  // 抓取分类页面
-  async crawlerClassify(href){
-    let res = await this.Page.findOne({name:href});
-    if(!res){
-      const list =await this.Crawler.onlineClassify(href);
-      res = await this.Page.savePage({name:href,list})
+    const ctx = this.ctx;
+    let res = await this.Page.findOne({name:"onlineMenu"});
+    if(!res || ctx.helper.metaTimeOut(2,res)){
+      const list =await this.Crawler.onlineMenu();
+      res = await this.Page.savePage({ name: "onlineMenu", list });
     };
     return res;
   }
 
+  // 请求页面
+  async fetchPage(type,href){
+    const ctx = this.ctx;
+    let res = await this.Page.findOne({name:href});
+    let list;
+    if(!res || ctx.helper.metaTimeOut(2,res)){
+      switch(type){
+        case 20://筛选
+          list =await this.Crawler.onlineClassify(href);
+          res = await this.Page.savePage({name:href,list,type})
+          return;
+        break;
+        case 21://首页
+          list =await this.Crawler.onlineHome(href);
+          console.log(list);
+          // res = await this.Page.savePage({name:href,list,type})
+          return;
+        break;
+      }
+    };
+    return res;
+  }
+
+  // 请求电影
+  async fetchMovie(id,time){
+    const ctx = this.ctx;
+    let res = await this.Online.findOne({_id:id});
+    if(!res || ctx.helper.metaTimeOut(time,res)){
+      const movie =await this.Crawler.onlineMovie(id);
+      res = await this.Online.saveOnline(movie);
+    };
+    return res;
+  }
 }
 
 module.exports = MoviesService;

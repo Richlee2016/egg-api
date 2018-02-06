@@ -9,7 +9,8 @@ class HomeController extends Controller {
   async index() {
     const ctx = this.ctx;
     // this.app.apiDoc
-    await ctx.render('index.html', { apis: this.app.apiDocument() });
+    const apiDocuments = this.app.apiDocument();
+    await ctx.render('index.html', { apis:apiDocuments});
   }
   // 定时任务
   // 获取电影家园首页

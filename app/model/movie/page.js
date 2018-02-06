@@ -6,6 +6,16 @@ module.exports = app => {
   const Mixed = Schema.Types.Mixed
   const MoviePageSchema = new mongoose.Schema({
     name: String,
+    /**
+     * 10 电影家园首页
+     * 20 熊猫-筛选
+     * 21 熊猫-首页
+     * 22 熊猫-全部影片
+     * 23 熊猫-影片排行
+     * 24 熊猫-最近更新
+     * 25 熊猫-专题
+     */
+    type:Number,
     list: Mixed,
     meta: {
       createAt: {
@@ -30,15 +40,10 @@ module.exports = app => {
 
   MoviePageSchema.statics = {
     async savePage(data) {
-      const { name, list } = data;
-      let page = await this.findOne({ name: name }).exec();
-      const _page = {
-        name,
-        list
-      }
+      let page = await this.findOne({ name: data.name }).exec();
+      const _page = data;
       if (page) {
-        page.name = name;
-        page.list = list;
+        page = Object.assign(page,_page);
       } else {
         page = new Page(_page);
       };

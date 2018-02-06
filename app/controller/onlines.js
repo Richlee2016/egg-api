@@ -36,9 +36,15 @@ class MoviesController extends Controller {
     ctx.body = menu;
     ctx.status = 200;
   }
-  async single_Classify(ctx){ 
+  async single_Page(ctx){ 
     const {id} = ctx.params;
-    const res = await this.service.onlines.crawlerClassify(id);
+    const {type} = ctx.query;
+    const res = await this.service.onlines.fetchPage(Number(type),id);
+    ctx.body = res;
+  }
+  async single_Movie(ctx){
+    const {id} = ctx.params;
+    const res = await this.service.onlines.fetchMovie(Number(id),2);
     ctx.body = res;
   }
 }
