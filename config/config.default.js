@@ -8,7 +8,7 @@ module.exports = appInfo => {
     keys: appInfo.name + "_1514550505563_1708",
     cluster:{
       listen: {
-        port: 3006,
+        port: 8081,
         hostname: '127.0.0.1',
         // path: '/var/run/egg.sock',
       }
