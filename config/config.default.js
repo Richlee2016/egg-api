@@ -9,10 +9,7 @@ module.exports = appInfo => {
     mongoose: {
       // url: "mongodb://localhost:27017/koaapi",
       url: "mongodb://127.0.0.1:18888/richmovie",
-      options: {
-        user:'rich_movie',
-        password:'richmovie345642459'
-      }
+      options: {}
     },
     middleware: ["errorHandler"],
     errorHandler: {
