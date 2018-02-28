@@ -36,10 +36,9 @@ class MoviesController extends Controller {
     ctx.body = menu;
     ctx.status = 200;
   }
-  async single_Page(ctx){ 
-    const {id} = ctx.params;
-    const {type} = ctx.query;
-    const res = await this.service.onlines.fetchPage(Number(type),id);
+  async post_Page(ctx){ 
+    const {href,type} = ctx.request.body;
+    const res = await this.service.onlines.fetchPage(Number(type),href);
     ctx.body = res;
   }
   async single_Movie(ctx){

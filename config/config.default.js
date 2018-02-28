@@ -19,7 +19,8 @@ module.exports = appInfo => {
       csrf: {
         enable: false,
         ignoreJSON: true
-      }
+      },
+      domainWhiteList: [ 'http://localhost:8087','http://192.168.2.120:8087','http://book.richfly.cn'],
     },
     cors: {
       allowMethods: "GET,HEAD,PUT,POST,DELETE,PATCH,OPTIONS"

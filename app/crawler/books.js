@@ -7,22 +7,23 @@ class BookCrawler {
     constructor() {
         this.config = {
             dingDianSearch:q => `http://zhannei.baidu.com/cse/search?s=1682272515249779940&entry=1&q=${encodeURIComponent(q)}`,
-            read: (id, chapter) => `https://www.23us.cc/html/4/${id}/${chapter}.html`
+            read: (id,nid,chapter) => `https://www.23us.cc/html/${nid}/${id}/${chapter}.html`
         }
     }
 
     async chapter(href){
         try {
             const resHtml = await request(href);
+            console.log(href);
             return this[chapter](resHtml);
         } catch (error) {
             console.error(error);
         }
     }
 
-    async read(id,chapter){
+    async read(id,nid,chapter){
         try {
-            const resHtml = await request(this.config.read(id, chapter));
+            const resHtml = await request(this.config.read(id,nid,chapter));
             return this[read](resHtml);
         } catch (error) {
             console.error(error);
@@ -42,6 +43,7 @@ class BookCrawler {
     [chapter](html) {
         const $ = cheerio.load(html);
         var chapterDom = $('.chapterlist dd a').get();
+        console.log($('.chapterlist dd a').html());
         const numReg = /(\d+).html/;
         var chapter = chapterDom.map(function (o) {
             return {
@@ -73,10 +75,11 @@ class BookCrawler {
             const getAuthor = $(o).find('.result-game-item-info p').eq(0).find('span').eq(1);
             let regChin = str => str.match(/([\u4e00-\u9fa5]+)/g);
             const oneAuthor = regChin(getAuthor.text()) || [""];
-            const reg = /http:\/\/www\.23us\.cc\/html\/(\d)\/(\d+)\//
+            const reg = /http:\/\/www\.23us\.cc\/html\/(\d+)\/(\d+)\//
             let myHref = info.attr("href");
+            const [,a,b] = myHref.match(reg);
             return {
-                id:myHref.match(reg)?myHref.match(reg)[2]:"",
+                id:[a,b],
                 name:info.attr("title"),
                 href:info.attr("href"),
                 author:oneAuthor[0]

@@ -10,10 +10,13 @@ module.exports = app => {
      * 10 电影家园首页
      * 20 熊猫-筛选
      * 21 熊猫-首页
-     * 22 熊猫-全部影片
-     * 23 熊猫-影片排行
-     * 24 熊猫-最近更新
-     * 25 熊猫-专题
+     * 22 熊猫-电影
+     * 23 熊猫-连续剧
+     * 24 熊猫-综艺
+     * 25 熊猫-动漫
+     * 26 熊猫-专题
+     * 27 熊猫-影片排行
+     * 28 熊猫-最近更新
      */
     type:Number,
     list: Mixed,
@@ -50,9 +53,9 @@ module.exports = app => {
 
       try {
         await page.save();
-        console.log(`${name}更新成功`);
+        console.log(`${_page.name}更新成功`);
       } catch (error) {
-        console.log(`${name}更新失败`);
+        console.log(`${_page.name}更新失败`);
         console.log(error);
       }
       return data;

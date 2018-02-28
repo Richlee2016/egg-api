@@ -19,22 +19,36 @@ class MoviesService extends Service {
     const director = p.director;
     const mySearch = () => {
       let arr = [];
-      if (area) arr.push({ area });
-      if (type) arr.push({ type });
-      if (year) arr.push({ year });
-      if (actor) arr.push({ actor });
-      if (director) arr.push({ director });
+      if (area) arr.push({
+        area
+      });
+      if (type) arr.push({
+        type
+      });
+      if (year) arr.push({
+        year
+      });
+      if (actor) arr.push({
+        actor
+      });
+      if (director) arr.push({
+        director
+      });
       return arr;
     };
     let allSearch = {};
     if (mySearch().length > 0) {
-      allSearch = Object.assign({}, { $and: mySearch() });
+      allSearch = Object.assign({}, {
+        $and: mySearch()
+      });
     }
     let skip = (page - 1) * size;
     try {
       const counts = await this.Online.count(allSearch).exec();
       const movielist = await this.Online.find(allSearch)
-        .sort({ id: -1 })
+        .sort({
+          id: -1
+        })
         .limit(size)
         .skip(skip)
         .exec();
@@ -51,7 +65,9 @@ class MoviesService extends Service {
   // 单个在线电影
   async fetchOnlineMovie(id) {
     try {
-      return await this.Online.findOne({ id }).exec();
+      return await this.Online.findOne({
+        id
+      }).exec();
     } catch (error) {
       console.log("电影查询错误");
       console.log(error);
@@ -59,45 +75,75 @@ class MoviesService extends Service {
   }
 
   // 在线电影menu 获取
-  async fetchMenu(){
+  async fetchMenu() {
     const ctx = this.ctx;
-    let res = await this.Page.findOne({name:"onlineMenu"});
-    if(!res || ctx.helper.metaTimeOut(2,res)){
-      const list =await this.Crawler.onlineMenu();
-      res = await this.Page.savePage({ name: "onlineMenu", list });
+    let res = await this.Page.findOne({
+      name: "onlineMenu"
+    });
+    if (!res || ctx.helper.metaTimeOut(2, res)) {
+      const list = await this.Crawler.onlineMenu();
+      res = await this.Page.savePage({
+        name: "onlineMenu",
+        list
+      });
     };
     return res;
   }
 
   // 请求页面
-  async fetchPage(type,href){
+  async fetchPage(type, href) {
     const ctx = this.ctx;
-    let res = await this.Page.findOne({name:href});
+    let res = await this.Page.findOne({
+      name: href
+    });
     let list;
-    if(!res || ctx.helper.metaTimeOut(2,res)){
-      switch(type){
-        case 20://筛选
-          list =await this.Crawler.onlineClassify(href);
-          res = await this.Page.savePage({name:href,list,type})
-          return;
-        break;
-        case 21://首页
-          list =await this.Crawler.onlineHome(href);
-          console.log(list);
-          // res = await this.Page.savePage({name:href,list,type})
-          return;
-        break;
+    if (!res || ctx.helper.metaTimeOut(2, res)) {
+      switch (type) {
+        case 20: //筛选
+          list = await this.Crawler.onlineClassify(href);
+          break;
+        case 21: //首页
+          list = await this.Crawler.onlineHome(href);
+          break;
+        case 22: //电影
+          list = await this.Crawler.onlinePlay(href, type);
+          break;
+        case 23: //电视剧
+          list = await this.Crawler.onlinePlay(href, type);
+          break;
+        case 24: //电视剧
+          list = await this.Crawler.onlinePlay(href, type);
+          break;
+        case 25: //电视剧
+          list = await this.Crawler.onlinePlay(href, type);
+          break;
+        case 26: //专题
+          list = await this.Crawler.onlineTopic(href, type);
+          break;
+        case 27: //影片排行
+          list = await this.Crawler.onlineRank(href, type);
+          break;
+        case 28: //最近更新
+          list = await this.Crawler.onlineNewest(href, type);
+          break;
       }
+      res = await this.Page.savePage({
+        name: href,
+        list,
+        type
+      });
     };
     return res;
   }
 
   // 请求电影
-  async fetchMovie(id,time){
+  async fetchMovie(id, time) {
     const ctx = this.ctx;
-    let res = await this.Online.findOne({_id:id});
-    if(!res || ctx.helper.metaTimeOut(time,res)){
-      const movie =await this.Crawler.onlineMovie(id);
+    let res = await this.Online.findOne({
+      _id: id
+    });
+    if (!res || ctx.helper.metaTimeOut(time, res)) {
+      const movie = await this.Crawler.onlineMovie(id);
       res = await this.Online.saveOnline(movie);
     };
     return res;

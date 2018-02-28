@@ -3,10 +3,11 @@ module.exports = app => {
   const { Schema } = mongoose;
   const FreeSchema = new mongoose.Schema({
     _id: Number,
-    freeId: Number,
+    freeId: Array,
     name: String,
     author: String,
     href: String,
+    chapter:Array,
     meta: {
       createAt: {
         type: Date,
@@ -31,13 +32,13 @@ module.exports = app => {
   FreeSchema.statics = {
     async SaveFree(free) {
       let getFree = await this.findOne({ _id: free._id }).exec();
-      console.log(free);
       const _free = free;
       if (getFree) {
         getFree.name = free.name;
         getFree.author = free.author;
         getFree.freeId = free.freeId;
         getFree.href = free.href;
+        getFree.chapter = free.chapter;
       } else {
         getFree = new Free(_free);
       }

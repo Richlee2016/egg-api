@@ -30,9 +30,9 @@ class BooksController extends Controller {
   }
   async get_FreeBookRead() {
     const ctx = this.ctx;
-    const { id, chapter } = ctx.query;
-    const res = await ctx.service.books.FetchContent(id, chapter);
-    ctx.body = res.text ? res : "";
+    const { id,nid,chapter } = ctx.query;
+    const res = await ctx.service.books.FetchContent(id,nid,chapter);
+    ctx.body = res&&res.text ? res : "";
     ctx.status = 200;
   }
   async post_UpdateFreeBook() {
