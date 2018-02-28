@@ -7,7 +7,7 @@ module.exports = appInfo => {
   config = {
     keys: appInfo.name + "_1514550505563_1708",
     mongoose: {
-      url: "mongodb://localhost:27017/koaapi",
+      url: "mongodb://rich_movie:richmovie345642459@127.0.0.1:18888/richmovie",
       options: {}
     },
     middleware: ["errorHandler"],
