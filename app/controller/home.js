@@ -6,11 +6,12 @@ class HomeController extends Controller {
   constructor(app){
     super(app)
   }
-  async index() {
-    const ctx = this.ctx;
+  async index(ctx) {
+    // const ctx = this.ctx;
     // this.app.apiDoc
-    const apiDocuments = this.app.apiDocument();
-    await ctx.render('index.html', { apis:apiDocuments});
+    // const apiDocuments = this.app.apiDocument();
+    // await ctx.render('index.html', { apis:apiDocuments});
+    ctx.body = 1;
   }
   // 定时任务
   // 获取电影家园首页
