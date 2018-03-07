@@ -9,10 +9,10 @@ exports.validate = {
 };
 
 // mongodb 数据库
-// exports.mongoose = {
-//   enable: true,
-//   package: "egg-mongoose"
-// };
+exports.mongoose = {
+  enable: true,
+  package: "egg-mongoose"
+};
 
 exports.cors = {
   enable: true,

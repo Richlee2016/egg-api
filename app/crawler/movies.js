@@ -3,7 +3,7 @@ const rp = require("request-promise");
 const install = require("superagent-charset");
 const request = require("superagent");
 const superagent = install(request);
-
+const puppeteer = require("puppeteer")
 class BookCrawler {
   constructor() {
     this.config = {
@@ -31,12 +31,14 @@ class BookCrawler {
       superagent
         .get(url)
         .charset("gb2312")
-        .end(function(err, res) {
+        .end(function (err, res) {
           if (err) {
             reject(err);
           }
           if (res) {
-            var $ = cheerio.load(res.text, { decodeEntities: false });
+            var $ = cheerio.load(res.text, {
+              decodeEntities: false
+            });
             resolve($);
           }
         });
@@ -88,8 +90,8 @@ class BookCrawler {
     const idList = list.map(o => {
       return (
         $(o)
-          .attr("href")
-          .match(this.numReg)[0] || ""
+        .attr("href")
+        .match(this.numReg)[0] || ""
       );
     });
     return Math.max.apply(Math, idList);
@@ -99,12 +101,43 @@ class BookCrawler {
   async bili(keyword) {
     const s = encodeURIComponent(keyword);
     try {
-      const reqHtml = await rp({ uri: this.crawlerSrc.bili(s), json: true });
+      const reqHtml = await rp({
+        uri: this.crawlerSrc.bili(s),
+        json: true
+      });
       const bili = this._biliHandle(reqHtml);
       return bili;
     } catch (error) {
       console.error(error);
     }
+  }
+
+  // pupptest
+  async pupp() {
+    const sleep = time => {
+      return new Promise((resolve,reject) => {
+        setTimeout(() => {
+          resolve();
+        }, time);
+      })
+    }
+    const browser = await puppeteer.launch({
+      arg: ['--no-sandbox'],
+      dumpio: false
+    });
+    const page = await browser.newPage();
+    await page.goto("https://movie.douban.com/", {
+      waitUntil: 'networkidle2'
+    });
+    await sleep(3000)
+    // 获取节点
+
+    const res = await page.evaluate(() => {
+      var $ = window.$;
+      return $(".nav-logo").html()
+    });
+    console.log(res);
+    await browser.close();
   }
 
   // 处理bili dom
@@ -128,8 +161,8 @@ class BookCrawler {
           .attr("data-src"),
         time: trimReg(
           $(o)
-            .find(".so-imgTag_rb")
-            .text()
+          .find(".so-imgTag_rb")
+          .text()
         ),
         playTime: trimReg(tags.eq(1).text()),
         upTime: trimReg(tags.eq(2).text()),
@@ -219,8 +252,8 @@ class BookCrawler {
         .forEach((o, i) => {
           if (
             $(o)
-              .find(".down_list")
-              .get().length === 1
+            .find(".down_list")
+            .get().length === 1
           ) {
             var res = $(o)
               .find(".down_list li")
@@ -260,9 +293,9 @@ class BookCrawler {
       let regChin = str => str.match(/([\u4e00-\u9fa5]+)/g);
       let resultArr = dom =>
         dom
-          .find("a")
-          .get()
-          .map(o => $(o).text());
+        .find("a")
+        .get()
+        .map(o => $(o).text());
       let otherName = str => str.slice(3, str.length);
       //连续剧
       if (firstLabel === "更新状态：" || firstLabel === "更新至：") {

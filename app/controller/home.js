@@ -5,13 +5,12 @@ const Controller = require('egg').Controller;
 class HomeController extends Controller {
   constructor(app){
     super(app)
+    this.Crawler = this.ctx.helper.crawler.Movie;
   }
   async index(ctx) {
-    // const ctx = this.ctx;
-    // this.app.apiDoc
-    // const apiDocuments = this.app.apiDocument();
-    // await ctx.render('index.html', { apis:apiDocuments});
-    ctx.body = 1;
+    this.app.apiDoc
+    const apiDocuments = this.app.apiDocument();
+    await ctx.render('index.html', { apis:apiDocuments});
   }
   // 定时任务
   // 获取电影家园首页
@@ -24,6 +23,12 @@ class HomeController extends Controller {
   async get_getOnlineMenu(ctx) {
     const res = await ctx.service.onlines.crawlerMenu();
     ctx.body = res;
+  }
+
+  // test puppeteer
+  async get_pupp(ctx){
+    const res = await this.Crawler.pupp();
+    ctx.body = 1;
   }
 
 }
