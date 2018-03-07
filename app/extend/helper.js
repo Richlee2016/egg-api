@@ -1,6 +1,8 @@
 const MovieCrawler = require("../crawler/movies");
 const BookCrawler = require("../crawler/books");
 const OnlineCrawler = require("../crawler/onlines");
+const qiniu = require('qiniu')
+const nanoid = require('nanoid')
 module.exports = {
   // 爬虫
   crawler: {

@@ -1,6 +1,9 @@
-const fs =require("fs")
+const fs = require("fs")
 const path = require("path")
 module.exports = app => {
+    app.messenger.on('rich', data => {
+        console.log(data);
+    });
     // app.sessionStore = {
     //   async get(key) {
     //     const res = await app.redis.get(key);
