@@ -3,6 +3,7 @@ const path = require("path")
 module.exports = app => {
     app.messenger.on('rich', data => {
         console.log(data);
+        console.log(1);
     });
     // app.sessionStore = {
     //   async get(key) {
@@ -24,4 +25,4 @@ module.exports = app => {
     //     app.apiDocument = 1;
     // });
     // app.apiDocument = 1;
-}  
+}
