@@ -5,6 +5,14 @@ module.exports = appInfo => {
 
   // 数据库配置
   config = {
+    richCof: {
+      qiniu: {
+        cname: "http://go.richfly.cn/",
+        bucket: "eggapi",
+        AK: "OBDA2gN9-FJfAzWExCHGNNG9QW5FqNtUrD57IwIi",
+        SK: "lkrOjtgXY4WmN7NcJNSKNXb7aLue13_CPg_0X0NH"
+      }
+    },
     keys: appInfo.name + "_1514550505563_1708",
     cluster: {
       listen: {

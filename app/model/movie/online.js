@@ -47,7 +47,6 @@ module.exports = app => {
       } else {
         online = new Online(_online);
       };
-
       try {
         await online.save();
         console.log(`${online.name}更新成功`);

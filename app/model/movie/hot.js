@@ -1,4 +1,5 @@
 module.exports = app => {
+  const config = app.config.richCof.qiniu;
   const mongoose = app.mongoose;
   const { Schema } = mongoose;
   const Mixed = Schema.Types.Mixed;
@@ -6,10 +7,13 @@ module.exports = app => {
     id: Number,
     name: String,
     movieHome: { type:Number, ref: "t_movie_home" },
-    onlineSrc:String,
+    // onlineSrc:String,
     // bgm: String,
-    videoUrl: String,
-    hotType: Number,//1 热门推荐  2 即将上映 3.经典影片
+    video: String,
+    videoKey:String,
+    cover:String,
+    coverKey:String,
+    hotType: Number,//1 热门推荐  2 即将上映 3.经典影片,
     meta: {
       createAt: {
         type: Date,
@@ -32,27 +36,23 @@ module.exports = app => {
   });
 
   HotSchema.statics = {
-    async SaveHot(hot) {
-      let getHot = await this.findOne({ name:hot.id }).exec();
-      const _hot = hot;
-      console.log(hot);
-      if (getHot) {
-        getHot.name = hot.name;
-        getHot.movieHome = hot.movieHome;
-        getHot.onlineSrc = hot.onlineSrc;
-        // getHot.bgm = hot.bgm;
-        getHot.videoUrl = `http://www.yugaopian.cn/embed/${hot.videoUrl}`;
-        getHot.hotType = hot.hotType;
+    async SaveHot(data) {
+      let hot = await this.findOne({ id:data.id }).exec();
+      let count = await this.count();
+      const _hot = Object.assign({},data,{
+        id:count+1
+      });
+      if (hot) {
+        hot = Object.assign(hot,_hot);
       } else {
-        _hot.videoUrl = `http://www.yugaopian.cn/embed/${hot.videoUrl}`;
-        getHot = new Hot(_hot);
+        hot = new Hot(_hot);
       }
       try {
-        const res = await getHot.save();
-        console.log(`${hot.name}更新成功`);
+        const res = await hot.save();
+        console.log(`${data.name}更新成功`);
         return res;
       } catch (error) {
-        console.log(`${hot.name}更新失败`);
+        console.log(`${data.name}更新失败`);
         console.log(error);
       }
     }

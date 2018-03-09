@@ -31,6 +31,12 @@ class HomeController extends Controller {
     ctx.body = 1;
   }
 
+  // test qiniu
+  async get_qiniu(ctx){
+    await ctx.service.qiniu.hotQiniuUpdate();
+    ctx.body = 1;
+  }
+
 }
 
 module.exports = HomeController;
