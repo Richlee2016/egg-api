@@ -12,7 +12,7 @@ class BookCrawler {
     this.crawlerSrc = {
       movie: id => `http://www.idyjy.com/sub/${id}.html`,
       page: "http://www.idyjy.com/",
-      newest: "http://www.idyjy.com/w.asp?p=1&f=0",
+      newest: "http://www.idyjy.com/w.asp?p=1&f=3",
       bili: s =>
         `https://search.bilibili.com/all?keyword=${s}&from_source=banner_search`
     };

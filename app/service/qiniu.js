@@ -1,7 +1,7 @@
 const Service = require("egg").Service;
 const qiniu = require("qiniu");
 const nanoid = require("nanoid");
-class BooksService extends Service {
+class QiniuService extends Service {
     constructor(ctx) {
         super(ctx);
         const config = ctx.app.config.richCof;
@@ -72,4 +72,4 @@ class BooksService extends Service {
     }
 }
 
-module.exports = BooksService;
+module.exports = QiniuService;

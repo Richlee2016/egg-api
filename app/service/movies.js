@@ -103,6 +103,7 @@ class MoviesService extends Service {
       if (isSave) {
         const page = await this.Crawler.page();
         const maxVal = await this.Page.savePage({ name: "index", list: page });
+        this.ctx.logger.info(`电影家园最新电影更新成功，最新资源为${newest}`)
       }
       return isSave;
     } catch (error) {

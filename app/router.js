@@ -15,5 +15,5 @@ module.exports = app => {
   
 
   // 定时任务 暂时暴露接口
-  router.get("/getPage", controller.home.getPage);
+  // router.get("/getPage", controller.home.getPage);
 };

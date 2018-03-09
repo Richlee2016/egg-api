@@ -12,25 +12,23 @@ class HomeController extends Controller {
     const apiDocuments = this.app.apiDocument();
     await ctx.render('index.html', { apis:apiDocuments});
   }
-  // 定时任务
-  // 获取电影家园首页
-  async getPage() {
-    const ctx = this.ctx;
-    const res = await ctx.service.movies.crawlerPage();
-    ctx.body = res;
-  }
+  /*******************************************测试 */
   // 获取在线电影 分类页
   async get_getOnlineMenu(ctx) {
     const res = await ctx.service.onlines.crawlerMenu();
     ctx.body = res;
   }
-
+  // 获取电影家园首页
+  async get_getPage() {
+    const ctx = this.ctx;
+    const res = await ctx.service.movies.crawlerPage();
+    ctx.body = res;
+  }
   // test puppeteer
   async get_pupp(ctx){
     const res = await this.Crawler.pupp();
     ctx.body = 1;
   }
-
   // test qiniu
   async get_qiniu(ctx){
     await ctx.service.qiniu.hotQiniuUpdate();
