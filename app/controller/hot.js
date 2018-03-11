@@ -1,7 +1,7 @@
 "use strict";
 
 const Controller = require("egg").Controller;
-class MoviesController extends Controller {
+class HotController extends Controller {
   constructor(app) {
     super(app);
     this.HotRules = {//热门推荐字段
@@ -24,7 +24,7 @@ class MoviesController extends Controller {
   async get_HotMovies() {
     const ctx = this.ctx;
     const { page, size } = ctx.query;
-    const res = await ctx.service.movies.fetchHotList({
+    const res = await ctx.service.hot.fetchHotList({
       page: Number(page) || 1,
       size: Number(size) || 10
     });
@@ -62,4 +62,4 @@ class MoviesController extends Controller {
   }
 }
 
-module.exports = MoviesController;
+module.exports = HotController;

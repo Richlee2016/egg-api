@@ -1,5 +1,5 @@
 const Service = require("egg").Service;
-class MoviesService extends Service {
+class HotService extends Service {
   constructor(ctx) {
     super(ctx);
     this.User = this.ctx.model.User.User;
@@ -13,12 +13,16 @@ class MoviesService extends Service {
   // 所有得推荐电影资源
   async fetchHotList(page, size) {
     let skip = (page - 1) * size;
+    const counts = await this.Hot.count({}).exec();
     const res = await this.Hot.find()
       .limit(size)
       .skip(skip)
       .populate("movieHome")
       .exec();
-    return res;
+    return {
+      list:res,
+      counts
+    };
   }
   // 单个推荐电影资源
   async fetchHotMovie(id) {
@@ -39,4 +43,4 @@ class MoviesService extends Service {
   }
 }
 
-module.exports = MoviesService;
+module.exports = HotService;
