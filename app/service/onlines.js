@@ -111,10 +111,10 @@ class MoviesService extends Service {
         case 23: //电视剧
           list = await this.Crawler.onlinePlay(href, type);
           break;
-        case 24: //电视剧
+        case 24: //综艺
           list = await this.Crawler.onlinePlay(href, type);
           break;
-        case 25: //电视剧
+        case 25: //动漫
           list = await this.Crawler.onlinePlay(href, type);
           break;
         case 26: //专题
@@ -125,6 +125,9 @@ class MoviesService extends Service {
           break;
         case 28: //最近更新
           list = await this.Crawler.onlineNewest(href, type);
+          break;
+        case 29: //分类页面
+          list = await this.Crawler.onlinePlay(href, type);
           break;
       }
       res = await this.Page.savePage({

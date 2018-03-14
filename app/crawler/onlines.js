@@ -87,14 +87,14 @@ class OnlineCrawler {
   // 抓取电影、电视剧、综艺、动漫
   async onlinePlay(href, type) {
     let listNum;
-    if ([22, 23, 24, 25].indexOf(type) !== 0) {
+    if ([22, 23, 24, 25, 29].indexOf(type) !== 0) {
       if (type === 22) {
         listNum = 9
       }
       if (type === 23) {
         listNum = 6;
       }
-      if (type === 24 || type === 25) {
+      if (type === 24 || type === 25 || type === 29) {
         listNum = 2;
       }
     } else {
@@ -138,12 +138,12 @@ class OnlineCrawler {
         uri: `${this.prefix}${href}`
       });
       const $ = cheerio.load(reqHtml);
-      const topList =[];
+      const topList = [];
       const listNum = $('.hy-video-list').get().length;
       for (let i = 0; i < listNum; i++) {
         topList.push({
-          head:this._blockHead(i,$,"head"),
-          list:this._blockList(i,$)
+          head: this._blockHead(i, $, "head"),
+          list: this._blockList(i, $)
         })
       }
       return topList
@@ -160,8 +160,8 @@ class OnlineCrawler {
       });
       const $ = cheerio.load(reqHtml);
       return {
-        tab:this._blockSwitchTab(0,$),
-        list:this._blockList(0,$)
+        tab: this._blockSwitchTab(0, $),
+        list: this._blockList(0, $)
       }
     } catch (error) {
       console.error(error);
@@ -204,6 +204,7 @@ class OnlineCrawler {
             href: $(o).attr("href")
           }
         }),
+        tag: this._blockTags(0, $),
       },
       hot: this[online.ONE]([0, 0, 0], $),
       movie: this[online.TWO]([1, 1, 0, 2], $),
@@ -557,7 +558,7 @@ class OnlineCrawler {
   }
   _blockHead(num, $, min) {
     let head = !min ? $(".hy-video-head").eq(num) : $(".hy-video-min-head").eq(num);
-    if(min === 'head'){
+    if (min === 'head') {
       head = $(".hy-video-list").eq(num).find(".head")
     }
     return {

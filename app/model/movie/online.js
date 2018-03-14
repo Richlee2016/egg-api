@@ -57,7 +57,7 @@ module.exports = app => {
       return online;
     }
   }
-  const Online = mongoose.model("t_online_movie", OnlineSchema);
+  const Online = mongoose.model("t_movie_online", OnlineSchema);
   
   return Online;
 };

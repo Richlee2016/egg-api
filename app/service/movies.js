@@ -5,7 +5,7 @@ class MoviesService extends Service {
     this.User = this.ctx.model.User.User;
     this.Movie = this.ctx.model.Movie.Movie;
     this.Page = this.ctx.model.Movie.Page;
-    this.Online = this.ctx.model.Movie.OnlineMovie;
+    this.Online = this.ctx.model.Movie.Online;
     this.Hot = this.ctx.model.Movie.Hot;
     this.Crawler = this.ctx.helper.crawler.Movie;
   }

@@ -23,7 +23,6 @@ class MoviesController extends Controller {
   async single_OnlineMovies() {
     const ctx = this.ctx;
     const { params: { id } } = ctx;
-    console.log(id);
     ctx.validate({ id: "int" }, { id: Number(id) });
     const res = await ctx.service.movies.fetchOnlineMovie(id);
     ctx.body = {
@@ -41,6 +40,7 @@ class MoviesController extends Controller {
     const res = await this.service.onlines.fetchPage(Number(type),href);
     ctx.body = res;
   }
+
   async single_Movie(ctx){
     const {id} = ctx.params;
     const res = await this.service.onlines.fetchMovie(Number(id),2);
