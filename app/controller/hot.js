@@ -37,7 +37,7 @@ class HotController extends Controller {
     const ctx = this.ctx;
     const { params: { id } } = ctx;
     ctx.validate({ id: "int" }, { id: Number(id) });
-    const res = await ctx.service.movies.fetchHotMovie(id);
+    const res = await ctx.service.hot.fetchHotMovie(id);
     ctx.body = {
       movie: res
     };
@@ -49,14 +49,14 @@ class HotController extends Controller {
     let body = ctx.request.body;
     const {movieHome,hotType} = ctx.request.body;
     const sendBody = Object.assign(body,{movieHome:Number(movieHome) || 0 ,hotType:Number(hotType) || 0});
-    const res = await ctx.service.movies.csHotMovie(sendBody);
+    const res = await ctx.service.hot.csHotMovie(sendBody);
     ctx.body = res;
     ctx.status = 201;
   }
   async post_DeleteHotMovie() {
     const ctx = this.ctx;
     const { id } = ctx.request.body;
-    const res = await ctx.service.movies.destroyHotMovie(id);
+    const res = await ctx.service.hot.destroyHotMovie(id);
     ctx.body = res;
     ctx.status = 204;
   }

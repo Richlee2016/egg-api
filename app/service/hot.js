@@ -33,7 +33,8 @@ class HotService extends Service {
   }
   // 增加或修改单个推荐电影资源
   async csHotMovie(hot) {
-    const res = await this.Hot.SaveHot(hot);
+    // const newhot =await this.ctx.service.qiniu.hotQiniuUpdate(hot)
+    const res = await this.Hot.SaveHot(newhot);
     return res;
   }
   // 删除单个推荐电影资源

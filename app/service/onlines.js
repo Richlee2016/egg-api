@@ -127,7 +127,7 @@ class MoviesService extends Service {
           list = await this.Crawler.onlineNewest(href, type);
           break;
         case 29: //分类页面
-          list = await this.Crawler.onlinePlay(href, type);
+          list = await this.Crawler.onlineTag(href, type);
           break;
       }
       res = await this.Page.savePage({

@@ -4,6 +4,6 @@ module.exports = {
         type: 'all', // 指定所有的 worker 都需要执行
     },
     async task(ctx) {
-        await ctx.service.qiniu.hotQiniuUpdate();
+        // await ctx.service.qiniu.hotQiniuUpdate();
     }
 };

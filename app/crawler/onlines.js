@@ -8,7 +8,8 @@ const online = {
   HOME: Symbol("oneline-home"),
   ONE: Symbol("box-one"),
   TWO: Symbol("box-two"),
-  PLAY: Symbol("online-play")
+  PLAY: Symbol("online-play"),
+  TAG: Symbol("online-tag")
 };
 
 class OnlineCrawler {
@@ -87,7 +88,7 @@ class OnlineCrawler {
   // 抓取电影、电视剧、综艺、动漫
   async onlinePlay(href, type) {
     let listNum;
-    if ([22, 23, 24, 25, 29].indexOf(type) !== 0) {
+    if ([22, 23, 24, 25, 29].indexOf(type) !== -1) {
       if (type === 22) {
         listNum = 9
       }
@@ -108,6 +109,19 @@ class OnlineCrawler {
         listNum
       });
       return play;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  //标签 
+  async onlineTag(href){
+    try {
+      const reqHtml = await rp({
+        uri: `${this.prefix}${href}`
+      });
+      const tag = await this[online.TAG](reqHtml);
+      return tag;
     } catch (error) {
       console.error(error);
     }
@@ -167,7 +181,23 @@ class OnlineCrawler {
       console.error(error);
     }
   }
-
+  [online.TAG](html){
+    const $ = cheerio.load(html);
+    let allList = [];
+    for (let i = 0; i < 2; i++) {
+      allList.push(this[online.ONE]([i, i, i], $));
+    }
+    return {
+      banner:this._blockBanner(0, $),
+      screen: this._blockScreen(0, $),
+      list:allList,
+      pageList: {
+        tag: this._blockSwitchTab(0, $),
+        list: this._blockList(2, $),
+        page: this._blockPage($)
+      }
+    }
+  }
   [online.PLAY](html, {
     listNum,
     pageListNum

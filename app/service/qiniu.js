@@ -32,43 +32,59 @@ class QiniuService extends Service {
         })
     }
     // hot推荐 视频地址
-    async hotQiniuUpdate() {
-        const hots = await this.Hot.find({
-            $or: [{
-                    videoKey: {
-                        $exists: false
-                    }
-                },
-                {
-                    videoKey: null
-                },
-                {
-                    videoKey: ''
+    async hotQiniuUpdate(hot) {
+        console.log(hot);
+        if (hot.video && !hot.videoKey) {
+            try {
+                let videoData = await this._uploadToQiniu(hot.video, `${nanoid()}.mp4`);
+                let coverData = await this._uploadToQiniu(hot.cover, `${nanoid()}.jpg`);
+                if (videoData.key) {
+                    hot.videoKey = this.config.qiniu.cname + videoData.key
                 }
-            ]
-        }).exec();
-        if (hots.length === 0) {
-            console.log("it is over");
-            return false;
-        }
-        for (let i = 0; i < hots.length; i++) {
-            let hot = hots[i];
-            if (hot.video && !hot.videoKey) {
-                try {
-                    let videoData = await this._uploadToQiniu(hot.video, `${nanoid()}.mp4`);
-                    let coverData = await this._uploadToQiniu(hot.cover, `${nanoid()}.jpg`);
-                    if (videoData.key) {
-                        hot.videoKey = this.config.qiniu.cname + videoData.key
-                    }
-                    if (coverData.key) {
-                        hot.coverKey = this.config.qiniu.cname + coverData.key
-                    }
-                    await hot.save();
-                } catch (error) {
-                    console.log(error);
+                if (coverData.key) {
+                    hot.coverKey = this.config.qiniu.cname + coverData.key
                 }
+                return hot;
+            } catch (error) {
+                console.log(error);
             }
         }
+        // const hots = await this.Hot.find({
+        //     $or: [{
+        //             videoKey: {
+        //                 $exists: false
+        //             }
+        //         },
+        //         {
+        //             videoKey: null
+        //         },
+        //         {
+        //             videoKey: ''
+        //         }
+        //     ]
+        // }).exec();
+        // if (hots.length === 0) {
+        //     console.log("it is over");
+        //     return false;
+        // }
+        // for (let i = 0; i < hots.length; i++) {
+        //     let hot = hots[i];
+        //     if (hot.video && !hot.videoKey) {
+        //         try {
+        //             let videoData = await this._uploadToQiniu(hot.video, `${nanoid()}.mp4`);
+        //             let coverData = await this._uploadToQiniu(hot.cover, `${nanoid()}.jpg`);
+        //             if (videoData.key) {
+        //                 hot.videoKey = this.config.qiniu.cname + videoData.key
+        //             }
+        //             if (coverData.key) {
+        //                 hot.coverKey = this.config.qiniu.cname + coverData.key
+        //             }
+        //             await hot.save();
+        //         } catch (error) {
+        //             console.log(error);
+        //         }
+        //     }
+        // }
     }
 }
 
