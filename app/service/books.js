@@ -1,5 +1,6 @@
 const Service = require("egg").Service;
 const uniqBy = require("lodash/uniqBy");
+
 class BooksService extends Service {
   constructor(ctx) {
     super(ctx);
