@@ -12,7 +12,7 @@ class BookCrawler {
     this.crawlerSrc = {
       movie: id => `http://www.idyjy.com/sub/${id}.html`,
       page: "http://www.idyjy.com/",
-      newest: "http://www.idyjy.com/w.asp?p=1&f=3",
+      newest: "http://www.idyjy.com/w.asp?p=1&f=3&l=t",
       bili: s =>
         `https://search.bilibili.com/all?keyword=${s}&from_source=banner_search`
     };
@@ -114,29 +114,30 @@ class BookCrawler {
 
   // pupptest
   async pupp() {
-    const sleep = time => {
-      return new Promise((resolve,reject) => {
-        setTimeout(() => {
-          resolve();
-        }, time);
-      })
-    }
-    const browser = await puppeteer.launch({
-      arg: ['--no-sandbox'],
-      dumpio: false
-    });
+    const sleep = time => new Promise(resolve => {
+      setTimeout(resolve, time);
+    })
+    const browser = await puppeteer.launch();
     const page = await browser.newPage();
-    await page.goto("https://movie.douban.com/", {
-      waitUntil: 'networkidle2'
+    await page.goto(this.crawlerSrc.newest, {
+      waitUntil: 'networkidle2',
+      timeout: 3000000
     });
-    await sleep(3000)
-    // 获取节点
 
-    const res = await page.evaluate(() => {
-      var $ = window.$;
-      return $(".nav-logo").html()
+    await sleep(3000);
+
+    // Get the "viewport" of the page, as reported by the page.
+    const maxId = await page.evaluate(() => {
+      var $ = window.jQuery;
+      var list = $(".movielist li>a");
+      var idList = $.map(list,function(o,i){
+        return $(o).attr("href").match(/\d+/g)[0] || ""
+      })
+      return Math.max.apply(Math, idList);
     });
-    console.log(res);
+
+
+
     await browser.close();
   }
 

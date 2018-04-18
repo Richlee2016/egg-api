@@ -15,12 +15,10 @@ class HotController extends Controller {
     };
   }
   /*
-  @HotMovies {热门推荐}
-  get /HotMovies {全部}
-  get /HotMovies/:id {单个}
-  post /UpdateHotMovie {增加和修改}
-  post /DeleteHotMovie {删除}
-  */
+   * 返回热点列表
+   * @query {Number} page 页数
+   * @query {Number} size 个数
+   */
   async get_HotMovies() {
     const ctx = this.ctx;
     const { page, size } = ctx.query;
@@ -29,10 +27,14 @@ class HotController extends Controller {
       size: Number(size) || 10
     });
     ctx.body = {
-      movies: res
+      data: res
     };
     ctx.status = 200;
   }
+  /*
+   * 返回单个热点
+   * @param {Number} id 电影id
+   */
   async single_HotMovies() {
     const ctx = this.ctx;
     const { params: { id } } = ctx;
@@ -43,6 +45,14 @@ class HotController extends Controller {
     };
     ctx.status = 200;
   }
+  /*
+   * 更新单个热点
+   * @body {String} name 电影名称
+   * @body {Number} movieHome 电影家园关联id
+   * @body {Number} hotType 热点类型
+   * @body {String} video 电影视频
+   * @body {String} cover 电影封面
+   */
   async post_UpdateHotMovie() {
     const ctx = this.ctx;
     // ctx.validate(this.Rules);
@@ -53,6 +63,11 @@ class HotController extends Controller {
     ctx.body = res;
     ctx.status = 201;
   }
+
+  /*
+   * 删除单个热点
+   * @body {Number} id 电影id
+   */
   async post_DeleteHotMovie() {
     const ctx = this.ctx;
     const { id } = ctx.request.body;

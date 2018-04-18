@@ -45,13 +45,14 @@ module.exports = app => {
       let _movie;
       if (isExist) {
         console.log(`${movie.id}已经存在`);
-        return;
+        return isExist;
       } else {
-        _movie = new Movie(movie);
+        _movie = new Movie(Object.assign(movie,{_id:movie.id}));
       }
       try {
         await _movie.save();
         console.log(`${movie.id}储存成功`);
+        return _movie;
       } catch (e) {
         console.log(`${movie.id}储存失败`);
         console.log(e);
@@ -59,6 +60,7 @@ module.exports = app => {
     }
   };
 
-  return mongoose.model('t_movie_home', MovieSchema);
+  const Movie= mongoose.model('t_movie_home', MovieSchema);
+  return Movie;
 }
 

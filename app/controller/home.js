@@ -19,10 +19,10 @@ class HomeController extends Controller {
     ctx.body = res;
   }
   // 获取电影家园首页
-  async get_getPage() {
+  async get_updateMovieHome() {
     const ctx = this.ctx;
-    const res = await ctx.service.movies.crawlerPage();
-    ctx.body = res;
+    const res = await ctx.service.crawler.updateMovieHome();
+    ctx.body = 1;
   }
   // test puppeteer
   async get_pupp(ctx){

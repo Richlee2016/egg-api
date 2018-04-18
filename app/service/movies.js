@@ -95,20 +95,12 @@ class MoviesService extends Service {
     }
   }
 
-  // 更新电影
-  async crawlerPage() {
+  // 更新最新电影 以及 电影首页
+  async updateHomeMovie() {
     try {
-      const newest = await this.Crawler.newestId();
-      const isSave = await this._saveMovies(newest);
-      if (isSave) {
-        const page = await this.Crawler.page();
-        const maxVal = await this.Page.savePage({ name: "index", list: page });
-        this.ctx.logger.info(`电影家园最新电影更新成功，最新资源为${newest}`)
-      }
-      return isSave;
+      
     } catch (error) {
-      console.log("首页抓取失败");
-      console.error(error);
+     
     }
   }
 

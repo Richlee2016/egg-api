@@ -4,6 +4,6 @@ module.exports = {
         type: 'all',
     },
     async task(ctx) {
-        await ctx.service.movies.crawlerPage();
+        // await ctx.service.movies.crawlerPage();
     }
 };
