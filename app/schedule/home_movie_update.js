@@ -1,9 +1,9 @@
 module.exports = {
     schedule: {
-        interval: '24h', 
+        interval: '10h', 
         type: 'all',
     },
     async task(ctx) {
-        // await ctx.service.movies.crawlerPage();
+        await ctx.service.crawler.updateMovieHome();
     }
 };

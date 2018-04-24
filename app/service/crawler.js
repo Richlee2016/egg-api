@@ -47,14 +47,15 @@ class CrawlerService extends Service {
             });
             console.log("maxId:",maxId);
             // 递归添加新电影
-            const setMovie = async (maxId) => {
+            const setMovie = async () => {
                 // 获取数据库最新ID
                 const [dbLastData] = await this.Movie.find().sort({
                     _id: -1
                 }).limit(1).exec();
                 const dbLastId = dbLastData.id;
-                console.log("dbLastId:",dbLastId);
+                
                 if (maxId > dbLastId) {
+                    console.log(maxId,dbLastId);
                     const uuid = dbLastId + 1;
                     console.log("src",this.HomeMovieConfig.sub(uuid));
                     await page.goto(this.HomeMovieConfig.sub(uuid), {
@@ -167,12 +168,11 @@ class CrawlerService extends Service {
                     });
                     console.log("getNewMovie",getNewMovie.name);
                     const _movie = await this.Movie.movieSave(Object.assign(getNewMovie,{id:uuid}));
-                    await setMovie(uuid + 1);
+                    await setMovie();
                 };
             }
-
-            await setMovie(maxId);
-
+            await setMovie();
+            console.log(`最新电影为${maxId}，已经完成更新，关闭浏览器`);
             await browser.close();
 
         } catch (error) {
