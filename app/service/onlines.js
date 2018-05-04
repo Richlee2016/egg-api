@@ -81,7 +81,7 @@ class MoviesService extends Service {
       name: "onlineMenu"
     });
     if (!res || ctx.helper.metaTimeOut(2, res)) {
-      const list = await this.Crawler.onlineMenu();
+      const list = await ctx.service.crawler.updateOnlineMenu();
       res = await this.Page.savePage({
         name: "onlineMenu",
         list
@@ -100,34 +100,34 @@ class MoviesService extends Service {
     if (!res || ctx.helper.metaTimeOut(2, res)) {
       switch (type) {
         case 20: //筛选
-          list = await this.Crawler.onlineClassify(href);
+          list = await ctx.service.crawler.onlineClassify(href);
           break;
         case 21: //首页
-          list = await this.Crawler.onlineHome(href);
+          list = await ctx.service.crawler.onlineHome(href);
           break;
         case 22: //电影
-          list = await this.Crawler.onlinePlay(href, type);
+          list = await ctx.service.crawler.onlinePlay(href, type);
           break;
         case 23: //电视剧
-          list = await this.Crawler.onlinePlay(href, type);
+          list = await ctx.service.crawler.onlinePlay(href, type);
           break;
         case 24: //综艺
-          list = await this.Crawler.onlinePlay(href, type);
+          list = await ctx.service.crawler.onlinePlay(href, type);
           break;
         case 25: //动漫
-          list = await this.Crawler.onlinePlay(href, type);
+          list = await ctx.service.crawler.onlinePlay(href, type);
           break;
         case 26: //专题
-          list = await this.Crawler.onlineTopic(href, type);
+          list = await ctx.service.crawler.onlineTopic(href, type);
           break;
         case 27: //影片排行
-          list = await this.Crawler.onlineRank(href, type);
+          list = await ctx.service.crawler.onlineRank(href, type);
           break;
         case 28: //最近更新
-          list = await this.Crawler.onlineNewest(href, type);
+          list = await ctx.service.crawler.onlineNewest(href, type);
           break;
         case 29: //分类页面
-          list = await this.Crawler.onlineTag(href, type);
+          list = await ctx.service.crawler.onlineTag(href, type);
           break;
       }
       res = await this.Page.savePage({

@@ -1,5 +1,5 @@
 const cheerio = require("cheerio");
-const rp = require("request-promise");
+const rp = require("request-promise-native");
 
 const online = {
   MENU: Symbol("online-menu"),
@@ -40,6 +40,7 @@ class OnlineCrawler {
       return menuList;
     } catch (error) {
       console.error(error);
+      console.log("error", this.onlineSrc.menu(1));
     }
   }
 
@@ -115,7 +116,7 @@ class OnlineCrawler {
   }
 
   //标签 
-  async onlineTag(href){
+  async onlineTag(href) {
     try {
       const reqHtml = await rp({
         uri: `${this.prefix}${href}`
@@ -167,61 +168,62 @@ class OnlineCrawler {
   }
   // //最近更新
   async onlineNewest(href, type) {
-    if (type !== 28) return;
-    try {
-      const reqHtml = await rp({
-        uri: `${this.prefix}${href}`
-      });
-      const $ = cheerio.load(reqHtml);
+      if (type !== 28) return;
+      try {
+        const reqHtml = await rp({
+          uri: `${this.prefix}${href}`
+        });
+        const $ = cheerio.load(reqHtml);
+        return {
+          tab: this._blockSwitchTab(0, $),
+          list: this._blockList(0, $)
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    
+    [online.TAG](html) {
+      const $ = cheerio.load(html);
+      let allList = [];
+      for (let i = 0; i < 2; i++) {
+        allList.push(this[online.ONE]([i, i, i], $));
+      }
       return {
-        tab: this._blockSwitchTab(0, $),
-        list: this._blockList(0, $)
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }
-  [online.TAG](html){
-    const $ = cheerio.load(html);
-    let allList = [];
-    for (let i = 0; i < 2; i++) {
-      allList.push(this[online.ONE]([i, i, i], $));
-    }
-    return {
-      banner:this._blockBanner(0, $),
-      screen: this._blockScreen(0, $),
-      list:allList,
-      pageList: {
-        tag: this._blockSwitchTab(0, $),
-        list: this._blockList(2, $),
-        page: this._blockPage($)
-      }
-    }
-  }
-  [online.PLAY](html, {
-    listNum,
-    pageListNum
-  }) {
-    const $ = cheerio.load(html);
-    let allList = [];
-    for (let i = 0; i < listNum; i++) {
-      allList.push(this[online.ONE]([i, i + 1, i], $));
-    }
-    return {
-      header: {
         banner: this._blockBanner(0, $),
-        tag: this._blockTags(0, $),
-        rank: this._blockRank(0, $)
-      },
-      screen: this._blockScreen(0, $),
-      list: allList,
-      pageList: {
-        tag: this._blockSwitchTab(0, $),
-        list: this._blockList(listNum + 1, $),
-        page: this._blockPage($)
+        screen: this._blockScreen(0, $),
+        list: allList,
+        pageList: {
+          tag: this._blockSwitchTab(0, $),
+          list: this._blockList(2, $),
+          page: this._blockPage($)
+        }
       }
     }
-  }
+    [online.PLAY](html, {
+      listNum,
+      pageListNum
+    }) {
+      const $ = cheerio.load(html);
+      let allList = [];
+      for (let i = 0; i < listNum; i++) {
+        allList.push(this[online.ONE]([i, i + 1, i], $));
+      }
+      return {
+        header: {
+          banner: this._blockBanner(0, $),
+          tag: this._blockTags(0, $),
+          rank: this._blockRank(0, $)
+        },
+        screen: this._blockScreen(0, $),
+        list: allList,
+        pageList: {
+          tag: this._blockSwitchTab(0, $),
+          list: this._blockList(listNum + 1, $),
+          page: this._blockPage($)
+        }
+      }
+    }
 
   [online.HOME](html) {
     const $ = cheerio.load(html);
@@ -274,19 +276,10 @@ class OnlineCrawler {
         atype: "电视剧",
         director: actorDire.splice(0, 1),
         actor: actorDire,
-        area: conDom
-          .eq(2)
-          .find("a")
-          .text() || "",
+        area: conDom.eq(2).find("a").text() || "",
         type: {
-          text: conDom
-            .eq(3)
-            .find("a")
-            .text(),
-          href: conDom
-            .eq(3)
-            .find("a")
-            .attr("href")
+          text: conDom.eq(3).find("a").text(),
+          href: conDom.eq(3).find("a").attr("href")
         },
         language: conDom.eq(4).text(),
         year: conDom.eq(5).text(),
